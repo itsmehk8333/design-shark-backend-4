@@ -12,14 +12,12 @@ dotenv.config();
 
 const app = express();
 
-// CORS with all methods allowed for specific origins
+// Explicit CORS configuration to allow all origins and methods
 app.use(cors({
-  origin: [
-    'http://localhost:5173', // Local dev
-    'https://vite-project-design-shark-frontend-2-kqzq.vercel.app' // Vercel frontend
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], // All common HTTP methods
-  allowedHeaders: ['*'],
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'], // All methods
+  allowedHeaders: ['*'], // Allow all headers
+  credentials: true, // Allow credentials if needed (e.g., cookies, Authorization)
 }));
 
 const port = process.env.PORT || '5000';
