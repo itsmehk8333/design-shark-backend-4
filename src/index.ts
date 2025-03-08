@@ -11,8 +11,8 @@ import { authenticateJWT } from './Auth/authMiddleware';
 dotenv.config();
 
 const app = express();
-
-const port = process.env.PORT || '5000'; 
+app.use(cors());
+const port = process.env.PORT || '5000';
 const dbUrl = process.env.MONGO_URI;
 
 if (!dbUrl) {
@@ -22,15 +22,7 @@ if (!dbUrl) {
 if (!port) {
   throw new Error('PORT is not defined in the environment variables');
 }
-
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://vite-project-design-shark-frontend-2-kqzq.vercel.app'
-  ],
-  methods: ['GET', 'PUT', 'POST'],
-  allowedHeaders: ['*'],
-}));
+// Allows all origins, methods, and headers
 app.use(express.json());
 
 mongoose.connect(dbUrl);
@@ -41,7 +33,7 @@ mongoose.connection.on('open', () => {
 
 mongoose.connection.on('error', (error) => {
   console.error('Database connection error:', error.message);
-  process.exit(1); 
+  process.exit(1);
 });
 
 app.get('/', (req: Request, res: Response) => {
