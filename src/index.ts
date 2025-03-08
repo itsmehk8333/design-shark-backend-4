@@ -8,14 +8,12 @@ import Files from './routes/Files.routes';
 import Auth from './routes/Auth.routes';
 import { authenticateJWT } from './Auth/authMiddleware';
 
-
 dotenv.config();
 
 const app = express();
 
 const port = process.env.PORT || '5000'; 
 const dbUrl = process.env.MONGO_URI;
-
 
 if (!dbUrl) {
   throw new Error('MONGO_URI is not defined in the environment variables');
@@ -25,9 +23,15 @@ if (!port) {
   throw new Error('PORT is not defined in the environment variables');
 }
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    'https://vite-project-design-shark-frontend-2-kqzq.vercel.app'
+  ],
+  methods: ['GET', 'PUT', 'POST'],
+  allowedHeaders: ['*'],
+}));
 app.use(express.json());
-
 
 mongoose.connect(dbUrl);
 
@@ -48,7 +52,6 @@ app.use('/api/users', authenticateJWT, Users);
 app.use('/api/folders', authenticateJWT, folder);
 app.use('/api/files', authenticateJWT, Files);
 app.use('/api/auth', Auth);
-
 
 app.listen(parseInt(port), () => {
   console.log(`Server running at http://localhost:${port}`);
